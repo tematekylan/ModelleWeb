@@ -12,7 +12,17 @@ Marketplace de modèles de sites web modernes pour le Cameroun et l'Afrique.
 - **Cloudinary** (uploads)
 - **Resend** (emails)
 
-## Démarrage
+## Déploiement production
+
+Guide complet : **[DEPLOY.md](DEPLOY.md)** (GitHub + Vercel + variables d'environnement).
+
+Résumé rapide :
+1. Créer un repo sur GitHub → `git push -u origin main`
+2. Importer sur [vercel.com/new](https://vercel.com/new)
+3. Ajouter les variables d'environnement (clés **Live** Paystack)
+4. Configurer le webhook Paystack vers `/api/webhooks/paystack`
+
+## Démarrage local
 
 ```bash
 # Installer les dépendances
