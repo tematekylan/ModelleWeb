@@ -1,4 +1,5 @@
 import crypto from "crypto";
+import { getAppUrl } from "@/lib/app-url";
 
 const PAYSTACK_BASE = "https://api.paystack.co";
 
@@ -26,7 +27,7 @@ export async function initPaystackPayment(params: PaystackInitParams) {
 
   if (!secretKey) {
     if (process.env.NODE_ENV === "development") {
-      const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+      const appUrl = getAppUrl();
       return {
         authorizationUrl: `${appUrl}/checkout/success?reference=${params.reference}&dev=1`,
       };
@@ -35,7 +36,7 @@ export async function initPaystackPayment(params: PaystackInitParams) {
   }
 
   const { amount, currency } = toPaystackSubunit(params.amountUsd);
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+  const appUrl = getAppUrl();
 
   const response = await fetch(`${PAYSTACK_BASE}/transaction/initialize`, {
     method: "POST",

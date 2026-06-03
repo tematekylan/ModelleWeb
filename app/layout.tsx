@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { getAppUrl } from "@/lib/app-url";
 import { Providers } from "./providers";
 import "./globals.css";
 
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
   },
   description:
     "Marketplace de templates web modernes pour le Cameroun et l'Afrique. Paiement sécurisé via Paystack.",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
+  metadataBase: new URL(getAppUrl()),
 };
 
 export default function RootLayout({

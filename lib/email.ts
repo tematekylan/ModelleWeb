@@ -1,4 +1,4 @@
-import { Resend } from "resend";
+import { getAppUrl } from "@/lib/app-url";
 
 const resend = process.env.RESEND_API_KEY
   ? new Resend(process.env.RESEND_API_KEY)
@@ -7,7 +7,7 @@ const resend = process.env.RESEND_API_KEY
 const from = process.env.RESEND_FROM_EMAIL ?? "TemplateHub CM <noreply@templatehub.cm>";
 
 export async function sendVerificationEmail(email: string, name: string, token: string) {
-  const url = `${process.env.NEXT_PUBLIC_APP_URL}/verify-email?token=${token}`;
+  const url = `${getAppUrl()}/verify-email?token=${token}`;
 
   if (!resend) {
     console.log("[DEV] Verification email:", url);

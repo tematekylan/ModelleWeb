@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { calculateCommission } from "@/lib/commission";
 import { sendPurchaseConfirmation, sendNewSaleEmail } from "@/lib/email";
+import { getAppUrl } from "@/lib/app-url";
 import { verifyPaystackTransaction } from "@/lib/paystack";
 
 export async function completePaymentByReference(reference: string, skipVerify = false) {
@@ -82,7 +83,7 @@ export async function completePaymentByReference(reference: string, skipVerify =
     });
   });
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+  const appUrl = getAppUrl();
   const purchase = await prisma.purchase.findFirst({
     where: { paymentId: payment.id },
   });

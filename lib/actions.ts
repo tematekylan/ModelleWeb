@@ -6,6 +6,7 @@ import { Role } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { sendVerificationEmail } from "@/lib/email";
 import { slugify } from "@/lib/utils";
+import { getAppUrl } from "@/lib/app-url";
 
 export type RegisterState = {
   error?: string;
@@ -179,7 +180,7 @@ export async function initiateCheckout(templateId: string, userId: string) {
 
   const { initPaystackPayment } = await import("@/lib/paystack");
   const user = await prisma.user.findUniqueOrThrow({ where: { id: userId } });
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+  const appUrl = getAppUrl();
 
   const { authorizationUrl } = await initPaystackPayment({
     reference: transactionId,
