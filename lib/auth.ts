@@ -3,14 +3,11 @@ import Credentials from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { authConfig } from "@/lib/auth.config";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  ...authConfig,
   adapter: PrismaAdapter(prisma),
-  trustHost: true,
-  session: { strategy: "jwt" },
-  pages: {
-    signIn: "/login",
-  },
   providers: [
     Credentials({
       name: "credentials",
@@ -43,39 +40,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
-  callbacks: {
-    authorized({ auth, request }) {
-      const { pathname } = request.nextUrl;
-      const user = auth?.user;
-
-      if (pathname.startsWith("/admin")) {
-        return user?.role === "ADMIN";
-      }
-      if (pathname.startsWith("/seller")) {
-        return user?.role === "SELLER" || user?.role === "ADMIN";
-      }
-      if (pathname.startsWith("/dashboard") || pathname.startsWith("/checkout")) {
-        return !!user;
-      }
-      return true;
-    },
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id!;
-        token.role = user.role;
-        token.emailVerified = user.emailVerified;
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.id as string;
-        session.user.role = token.role;
-        session.user.emailVerified = token.emailVerified as Date | null;
-      }
-      return session;
-    },
-  },
 });
 
 export async function getCurrentUser() {
